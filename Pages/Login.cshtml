@@ -1,0 +1,220 @@
+﻿@page
+@model IndexModel
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welkom</title>
+</head>
+<body>
+
+    <h1>Welkom</h1>
+
+    <div id="userInfo" style="display: none;">
+        Welkom, <span id="userEmail"></span>! Je rol is: <span id="userRole"></span>
+        <br>
+        <button id="logoutButton">Uitloggen</button>
+    </div>
+
+    <h2>Inloggen</h2>
+    <form id="loginForm">
+        <label for="loginEmail">E-mail:</label>
+        <input type="email" id="loginEmail" name="loginEmail" required><br>
+
+        <label for="loginPassword">Wachtwoord:</label>
+        <input type="password" id="loginPassword" name="loginPassword" required><br>
+
+        <button type="submit">Inloggen</button>
+    </form>
+
+    <table id="userTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Gebruiker ID</th>
+                <th>E-mail</th>
+                <th>Rol</th>
+                <th>Verander role</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody"></tbody>
+    </table>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase-configuratie
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyCCzNwDI9iTiTEc0QTN0XU39RxqWR9XYm4",
+            authDomain: "geoprofs-1b3fb.firebaseapp.com",
+            projectId: "geoprofs-1b3fb",
+            storageBucket: "geoprofs-1b3fb.appspot.com",
+            messagingSenderId: "141244233397",
+            appId: "1:141244233397:web:9e2ce2844d4ca7160e70fc",
+            measurementId: "G-SZ15Q61C7Q"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        const firestore = firebase.firestore();
+        let user;
+
+        const userInfoDiv = document.getElementById('userInfo');
+        const userEmail = document.getElementById('userEmail');
+        const userRole = document.getElementById('userRole');
+        const logoutButton = document.getElementById('logoutButton');
+        const loginForm = document.getElementById('loginForm');
+        const userTable = document.getElementById('userTable');
+
+        const roleOptions = ['admin', 'manager', 'medewerker'];
+
+        // Controleer de authenticatiestatus bij het initialiseren van de pagina
+        firebase.auth().onAuthStateChanged((loggedInUser) => {
+            if (loggedInUser) {
+                // Gebruiker is ingelogd
+                user = loggedInUser;
+                checkUserRole();
+            }
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = loginForm.loginEmail.value;
+            const password = loginForm.loginPassword.value;
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    user = userCredential.user;
+                    checkUserRole();
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert('Fout bij inloggen: ' + errorMessage);
+                });
+        });
+
+        function checkUserRole() {
+            firestore.collection('users').doc(user.uid).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        userRole.textContent = userData.role || 'Onbekend';
+
+                        if (userData.role === 'admin') {
+                            // Display the user management section for admin
+                            userTable.style.display = 'block';
+                            displayAllUsers();
+                        }
+                    } else {
+                        console.error('Gebruiker niet gevonden.');
+                        userRole.textContent = 'Onbekend';
+                    }
+                    userInfoDiv.style.display = 'block';
+                })
+                .catch((error) => {
+                    console.error('Fout bij ophalen gebruikersgegevens:', error);
+                });
+        }
+
+        function displayAllUsers() {
+            const userTableBody = document.getElementById('userTableBody');
+            userTableBody.innerHTML = ''; // Clear the table body
+
+            // Fetch all users from Firestore
+            firestore.collection('users').get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        const userData = doc.data();
+                        const userId = doc.id;
+
+                        const row = userTableBody.insertRow();
+                        const cell1 = row.insertCell(0);
+                        const cell2 = row.insertCell(1);
+                        const cell3 = row.insertCell(2);
+                        const cell4 = row.insertCell(3);
+
+                        cell1.textContent = userId;
+                        cell2.textContent = userData.email;
+                        cell3.textContent = userData.role || 'Onbekend';
+
+                        // Allow editing for all users
+                        const select = document.createElement('select');
+                        roleOptions.forEach((option) => {
+                            const optionElement = document.createElement('option');
+                            optionElement.value = option;
+                            optionElement.textContent = option;
+                            select.appendChild(optionElement);
+                        });
+                        select.addEventListener('change', () => {
+                            const newRole = select.value;
+                            updateUserRole(userId, newRole);
+                        });
+                        select.value = userData.role || '';
+                        cell4.appendChild(select);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Fout bij ophalen gebruikersgegevens:', error);
+                });
+        }
+
+        function updateUserRole(userId, newRole) {
+            // Controleren of de huidige gebruiker een beheerder is
+            firestore.collection('users').doc(user.uid).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        if (userData.role === 'admin') {
+                            // Alleen beheerders mogen rollen bijwerken
+                            firestore.collection('users').doc(userId).update({
+                                role: newRole
+                            })
+                                .then(() => {
+                                    console.log('Gebruikersrol bijgewerkt voor gebruiker: ' + userId);
+                                    // Refresh the table after updating the role
+                                    displayAllUsers();
+                                })
+                                .catch((error) => {
+                                    console.error('Fout bij bijwerken gebruikersrol:', error);
+                                });
+                        } else {
+                            console.error('Alleen beheerders mogen rollen bijwerken.');
+                        }
+                    } else {
+                        console.error('Huidige gebruiker niet gevonden.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Fout bij ophalen gebruikersgegevens:', error);
+                });
+        }
+
+        logoutButton.addEventListener('click', () => {
+            firebase.auth().signOut()
+                .then(() => {
+                    window.location.reload();  // Reload the page instead of hiding elements
+                })
+                .catch((error) => {
+                    console.error('Fout bij uitloggen:', error);
+                });
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
