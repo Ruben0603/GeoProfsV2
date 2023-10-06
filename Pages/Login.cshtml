@@ -34,7 +34,7 @@
                 <th>Gebruiker ID</th>
                 <th>E-mail</th>
                 <th>Rol</th>
-                <th>Verander role</th>
+                <th>Verander rol</th>
             </tr>
         </thead>
         <tbody id="userTableBody"></tbody>
@@ -45,8 +45,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // Firebase-configuratie
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
             apiKey: "AIzaSyCCzNwDI9iTiTEc0QTN0XU39RxqWR9XYm4",
@@ -72,10 +70,8 @@
 
         const roleOptions = ['admin', 'manager', 'medewerker'];
 
-        // Controleer de authenticatiestatus bij het initialiseren van de pagina
         firebase.auth().onAuthStateChanged((loggedInUser) => {
             if (loggedInUser) {
-                // Gebruiker is ingelogd
                 user = loggedInUser;
                 checkUserRole();
             }
@@ -107,7 +103,6 @@
                         userRole.textContent = userData.role || 'Onbekend';
 
                         if (userData.role === 'admin') {
-                            // Display the user management section for admin
                             userTable.style.display = 'block';
                             displayAllUsers();
                         }
@@ -124,9 +119,8 @@
 
         function displayAllUsers() {
             const userTableBody = document.getElementById('userTableBody');
-            userTableBody.innerHTML = ''; // Clear the table body
+            userTableBody.innerHTML = '';
 
-            // Fetch all users from Firestore
             firestore.collection('users').get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
@@ -143,7 +137,6 @@
                         cell2.textContent = userData.email;
                         cell3.textContent = userData.role || 'Onbekend';
 
-                        // Allow editing for all users
                         const select = document.createElement('select');
                         roleOptions.forEach((option) => {
                             const optionElement = document.createElement('option');
@@ -165,40 +158,22 @@
         }
 
         function updateUserRole(userId, newRole) {
-            // Controleren of de huidige gebruiker een beheerder is
-            firestore.collection('users').doc(user.uid).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        if (userData.role === 'admin') {
-                            // Alleen beheerders mogen rollen bijwerken
-                            firestore.collection('users').doc(userId).update({
-                                role: newRole
-                            })
-                                .then(() => {
-                                    console.log('Gebruikersrol bijgewerkt voor gebruiker: ' + userId);
-                                    // Refresh the table after updating the role
-                                    displayAllUsers();
-                                })
-                                .catch((error) => {
-                                    console.error('Fout bij bijwerken gebruikersrol:', error);
-                                });
-                        } else {
-                            console.error('Alleen beheerders mogen rollen bijwerken.');
-                        }
-                    } else {
-                        console.error('Huidige gebruiker niet gevonden.');
-                    }
+            firestore.collection('users').doc(userId).update({
+                role: newRole
+            })
+                .then(() => {
+                    console.log('Gebruikersrol bijgewerkt voor gebruiker: ' + userId);
+                    displayAllUsers();
                 })
                 .catch((error) => {
-                    console.error('Fout bij ophalen gebruikersgegevens:', error);
+                    console.error('Fout bij bijwerken gebruikersrol:', error);
                 });
         }
 
         logoutButton.addEventListener('click', () => {
             firebase.auth().signOut()
                 .then(() => {
-                    window.location.reload();  // Reload the page instead of hiding elements
+                    window.location.reload();
                 })
                 .catch((error) => {
                     console.error('Fout bij uitloggen:', error);
