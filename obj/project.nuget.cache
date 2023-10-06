@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tYiBc0pu0J29NRdOJeJ2NnWBRRhIlyh7SiekDQYyRFNY9rfcT3aLMxSAG1lcRk4c1COICUzy3Js3HjpdeRQjtQ==",
+  "dgSpecHash": "ryeRaW/P1vGkOQ0DD4LlnwrfhsTmF7fOLPy7W1yEi4aS4pZU3Jy/9STBmABooHwOqiN1rTWZO9bBrcYl1qXQMg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\joran\\OneDrive\\Documenten\\ROC Nijmegen\\Vakken\\C#\\GeoProfsV2\\GeoProfs.csproj",
+  "projectFilePath": "C:\\Users\\joran\\OneDrive\\Documenten\\ROC Nijmegen\\Vakken\\C#\\GeoprofsV3\\GeoProfsV2\\GeoProfs.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joran\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.2\\microsoft.visualstudio.azure.containers.tools.targets.1.17.2.nupkg.sha512"
   ],
