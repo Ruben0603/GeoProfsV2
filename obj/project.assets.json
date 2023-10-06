@@ -100,19 +100,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\joran\\.nuget\\packages\\": {}
+    "C:\\Users\\Milan\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\joran\\OneDrive\\Documenten\\ROC Nijmegen\\Vakken\\C#\\GeoProfsV2\\GeoProfs.csproj",
+      "projectUniqueName": "C:\\xampp\\htdocs\\GeoProfsV2\\GeoProfs.csproj",
       "projectName": "GeoProfs",
-      "projectPath": "C:\\Users\\joran\\OneDrive\\Documenten\\ROC Nijmegen\\Vakken\\C#\\GeoProfsV2\\GeoProfs.csproj",
-      "packagesPath": "C:\\Users\\joran\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\joran\\OneDrive\\Documenten\\ROC Nijmegen\\Vakken\\C#\\GeoProfsV2\\obj\\",
+      "projectPath": "C:\\xampp\\htdocs\\GeoProfsV2\\GeoProfs.csproj",
+      "packagesPath": "C:\\Users\\Milan\\.nuget\\packages\\",
+      "outputPath": "C:\\xampp\\htdocs\\GeoProfsV2\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\joran\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Milan\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

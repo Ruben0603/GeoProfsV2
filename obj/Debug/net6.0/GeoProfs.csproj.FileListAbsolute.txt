@@ -94,3 +94,35 @@ C:\Users\joran\OneDrive\Documenten\ROC Nijmegen\Vakken\C#\GeoProfs\obj\Debug\net
 C:\Users\joran\OneDrive\Documenten\ROC Nijmegen\Vakken\C#\GeoProfs\obj\Debug\net6.0\GeoProfs.pdb
 C:\Users\joran\OneDrive\Documenten\ROC Nijmegen\Vakken\C#\GeoProfs\obj\Debug\net6.0\GeoProfs.genruntimeconfig.cache
 C:\Users\joran\OneDrive\Documenten\ROC Nijmegen\Vakken\C#\GeoProfs\obj\Debug\net6.0\ref\GeoProfs.dll
+C:\xampp\htdocs\GeoProfsV2\bin\Debug\net6.0\appsettings.Development.json
+C:\xampp\htdocs\GeoProfsV2\bin\Debug\net6.0\appsettings.json
+C:\xampp\htdocs\GeoProfsV2\bin\Debug\net6.0\package-lock.json
+C:\xampp\htdocs\GeoProfsV2\bin\Debug\net6.0\package.json
+C:\xampp\htdocs\GeoProfsV2\bin\Debug\net6.0\GeoProfs.staticwebassets.runtime.json
+C:\xampp\htdocs\GeoProfsV2\bin\Debug\net6.0\GeoProfs.exe
+C:\xampp\htdocs\GeoProfsV2\bin\Debug\net6.0\GeoProfs.deps.json
+C:\xampp\htdocs\GeoProfsV2\bin\Debug\net6.0\GeoProfs.runtimeconfig.json
+C:\xampp\htdocs\GeoProfsV2\bin\Debug\net6.0\GeoProfs.dll
+C:\xampp\htdocs\GeoProfsV2\bin\Debug\net6.0\GeoProfs.pdb
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\GeoProfs.GeneratedMSBuildEditorConfig.editorconfig
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\GeoProfs.AssemblyInfoInputs.cache
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\GeoProfs.AssemblyInfo.cs
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\GeoProfs.csproj.CoreCompileInputs.cache
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\GeoProfs.MvcApplicationPartsAssemblyInfo.cache
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\GeoProfs.RazorAssemblyInfo.cache
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\GeoProfs.RazorAssemblyInfo.cs
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\staticwebassets\msbuild.GeoProfs.Microsoft.AspNetCore.StaticWebAssets.props
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\staticwebassets\msbuild.build.GeoProfs.props
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.GeoProfs.props
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.GeoProfs.props
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\staticwebassets.pack.json
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\staticwebassets.build.json
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\staticwebassets.development.json
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\scopedcss\Pages\Shared\_Layout.cshtml.rz.scp.css
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\scopedcss\bundle\GeoProfs.styles.css
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\scopedcss\projectbundle\GeoProfs.bundle.scp.css
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\GeoProfs.dll
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\refint\GeoProfs.dll
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\GeoProfs.pdb
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\GeoProfs.genruntimeconfig.cache
+C:\xampp\htdocs\GeoProfsV2\obj\Debug\net6.0\ref\GeoProfs.dll
