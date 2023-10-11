@@ -2,19 +2,69 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+    var user = HttpContext.User.Identity.Name; // Haal de ingelogde gebruikersnaam op
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welkom</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-<div class="popup" onclick="myFunction()">
-    Click me!
-    <div>
-        <form>
-            <input type="date" id="name" name="name" placeholder="Start date" />
-            <input type="date" id="name" name="name" placeholder="End date" />
-            <input type="text" id="name" name="name" placeholder="Reden van verlof" />
-        </form>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welkomstpagina</title>
+    <!-- Voeg de Firebase JavaScript SDK toe -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script> <!-- Voeg de Firebase Realtime Database SDK toe -->
+</head>
+<body>
+    <div id="welcomeMessage"></div>
+
+    <script>
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyCCzNwDI9iTiTEc0QTN0XU39RxqWR9XYm4",
+            authDomain: "geoprofs-1b3fb.firebaseapp.com",
+            projectId: "geoprofs-1b3fb",
+            storageBucket: "geoprofs-1b3fb.appspot.com",
+            messagingSenderId: "141244233397",
+            appId: "1:141244233397:web:9e2ce2844d4ca7160e70fc",
+            measurementId: "G-SZ15Q61C7Q"
+        };
+
+        // Initialisatie van Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Controleer of er een gebruiker is ingelogd
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // Gebruiker is ingelogd
+                const userEmail = user.email;
+
+                // Haal de naam op uit de Firebase Realtime Database
+                const database = firebase.database();
+                const userRef = database.ref('users');
+                userRef.orderByChild('email').equalTo(userEmail).once('value')
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const userData = snapshot.val();
+                            const userName = userData[Object.keys(userData)[0]].name;
+                            // Weergeef de welkomstboodschap
+                            const welcomeMessage = document.getElementById('welcomeMessage');
+                            welcomeMessage.innerText = `Welkom, ${userName}!`;
+                        } else {
+                            console.log('Gebruiker niet gevonden in de database');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Fout bij ophalen van gebruikersgegevens:', error);
+                    });
+            } else {
+                // Gebruiker is niet ingelogd
+                console.log('Geen ingelogde gebruiker');
+            }
+        });
+    </script>
+</body>
+</html>
+
+

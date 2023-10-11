@@ -61,28 +61,8 @@
         const firestore = firebase.firestore();
         let user;
 
-        const userInfoDiv = document.getElementById('userInfo');
-        const userEmail = document.getElementById('userEmail');
-        const userRole = document.getElementById('userRole');
-        const logoutButton = document.getElementById('logoutButton');
-        const loginForm = document.getElementById('loginForm');
-        const userTable = document.getElementById('userTable');
-
-        const roleOptions = ['admin', 'manager', 'medewerker'];
-
-        firebase.auth().onAuthStateChanged((loggedInUser) => {
-            if (loggedInUser) {
-                user = loggedInUser;
-                checkUserRole();
-            }
-        });
-
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const email = loginForm.loginEmail.value;
-            const password = loginForm.loginPassword.value;
-
+        // Functie om de gebruiker in te loggen
+        function login(email, password) {
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     user = userCredential.user;
@@ -93,84 +73,10 @@
                     const errorMessage = error.message;
                     alert('Fout bij inloggen: ' + errorMessage);
                 });
-        });
-
-        function checkUserRole() {
-            firestore.collection('users').doc(user.uid).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        userRole.textContent = userData.role || 'Onbekend';
-
-                        if (userData.role === 'admin') {
-                            userTable.style.display = 'block';
-                            displayAllUsers();
-                        }
-                    } else {
-                        console.error('Gebruiker niet gevonden.');
-                        userRole.textContent = 'Onbekend';
-                    }
-                    userInfoDiv.style.display = 'block';
-                })
-                .catch((error) => {
-                    console.error('Fout bij ophalen gebruikersgegevens:', error);
-                });
         }
 
-        function displayAllUsers() {
-            const userTableBody = document.getElementById('userTableBody');
-            userTableBody.innerHTML = '';
-
-            firestore.collection('users').get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        const userData = doc.data();
-                        const userId = doc.id;
-
-                        const row = userTableBody.insertRow();
-                        const cell1 = row.insertCell(0);
-                        const cell2 = row.insertCell(1);
-                        const cell3 = row.insertCell(2);
-                        const cell4 = row.insertCell(3);
-
-                        cell1.textContent = userId;
-                        cell2.textContent = userData.email;
-                        cell3.textContent = userData.role || 'Onbekend';
-
-                        const select = document.createElement('select');
-                        roleOptions.forEach((option) => {
-                            const optionElement = document.createElement('option');
-                            optionElement.value = option;
-                            optionElement.textContent = option;
-                            select.appendChild(optionElement);
-                        });
-                        select.addEventListener('change', () => {
-                            const newRole = select.value;
-                            updateUserRole(userId, newRole);
-                        });
-                        select.value = userData.role || '';
-                        cell4.appendChild(select);
-                    });
-                })
-                .catch((error) => {
-                    console.error('Fout bij ophalen gebruikersgegevens:', error);
-                });
-        }
-
-        function updateUserRole(userId, newRole) {
-            firestore.collection('users').doc(userId).update({
-                role: newRole
-            })
-                .then(() => {
-                    console.log('Gebruikersrol bijgewerkt voor gebruiker: ' + userId);
-                    displayAllUsers();
-                })
-                .catch((error) => {
-                    console.error('Fout bij bijwerken gebruikersrol:', error);
-                });
-        }
-
-        logoutButton.addEventListener('click', () => {
+        // Functie om de gebruiker uit te loggen
+        function logout() {
             firebase.auth().signOut()
                 .then(() => {
                     window.location.reload();
@@ -178,11 +84,62 @@
                 .catch((error) => {
                     console.error('Fout bij uitloggen:', error);
                 });
+        }
+
+        // Functie om de rol van de gebruiker te controleren
+        function checkUserRole() {
+            firestore.collection('users').doc(user.uid).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        const userRole = userData.role || 'Onbekend';
+                        const userEmail = user.email;
+
+                        // Sla gebruikersinformatie op in sessionStorage
+                        sessionStorage.setItem('userEmail', userEmail);
+                        sessionStorage.setItem('userRole', userRole);
+
+                        displayUserInfo();
+                    } else {
+                        console.error('Gebruiker niet gevonden.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Fout bij ophalen gebruikersgegevens:', error);
+                });
+        }
+
+        // Functie om de gebruikersinformatie weer te geven
+        function displayUserInfo() {
+            const userInfoDiv = document.getElementById('userInfo');
+            const userEmailElement = document.getElementById('userEmail');
+            const userRoleElement = document.getElementById('userRole');
+
+            const userEmail = sessionStorage.getItem('userEmail');
+            const userRole = sessionStorage.getItem('userRole');
+
+            userEmailElement.textContent = userEmail;
+            userRoleElement.textContent = userRole;
+            userInfoDiv.style.display = 'block';
+        }
+
+        // Eventlistener voor het inlogformulier
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = loginForm.loginEmail.value;
+            const password = loginForm.loginPassword.value;
+            login(email, password);
         });
+
+        // Eventlistener voor de uitlogknop
+        const logoutButton = document.getElementById('logoutButton');
+        logoutButton.addEventListener('click', logout);
     </script>
 
 </body>
 </html>
+
 
 
 
