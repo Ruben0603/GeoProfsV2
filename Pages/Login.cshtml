@@ -3,36 +3,32 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welkom</title>
+    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="login.css" />
 </head>
 <body>
-
-    <h1>Welkom</h1>
-
-    <div id="userInfo" style="display: none;">
-        Welkom, <span id="userEmail"></span>! Je rol is: <span id="userRole"></span>
-        <br>
-        <button id="logoutButton">Uitloggen</button>
-    </div>
-
-    <h2>Inloggen</h2>
+    <h2 class="py-3">Inloggen</h2>
     <form id="loginForm">
-        <label for="loginEmail">E-mail:</label>
-        <input type="email" id="loginEmail" name="loginEmail" required><br>
-
-        <label for="loginPassword">Wachtwoord:</label>
-        <input type="password" id="loginPassword" name="loginPassword" required><br>
-
-        <button type="submit">Inloggen</button>
+        <div class="mb-1">
+            <label for="loginEmail" class="form-label">E-mail:</label>
+            <input type="email" id="loginEmail" class="form-control" name="loginEmail" required><br>
+        </div>
+        <div class="mb-3">
+            <label for="loginPassword" class="form-label">Wachtwoord:</label>
+            <input type="password" id="loginPassword" class="form-control" name="loginPassword" required><br>
+        </div>
+        <button type="submit" class="btn btn-primary">Inloggen</button>
     </form>
 
-    <table id="userTable" style="display: none;">
+    <div class="pt-5" id="userInfo" style="display: none;">
+        Welkom, <span id="userEmail"></span>Je rol is <span id="userRole"></span>
+        <button class="btn btn-danger" id="logoutButton">Uitloggen</button>
+    </div>
+    <table id="userTable" class="table table-striped table-hover" style="display: none;">
         <thead>
             <tr>
                 <th>Gebruiker ID</th>
-                <th>E-mail</th>
+                <th></th>
                 <th>Rol</th>
                 <th>Verander rol</th>
             </tr>
