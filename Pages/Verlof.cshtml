@@ -1,0 +1,192 @@
+﻿@page
+@model GeoProfs.Pages.VerlofModel
+@{
+}
+
+<html>
+<head>
+    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="float">
+        <h2>Verlof aanvragen</h2>
+        <button type="button" class="btn btn-primary float float-right" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+            Verlof aanvragen
+        </button>
+
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Verlof aanvragen</h5>
+                        <button type="button" class="close btn " data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="verlofForm" action="post">
+                            <div class="form-group">
+                                <label for="verlof" class="col-form-label">Reden van verlof *</label>
+                                <select class="form-control" id="verlof">
+                                    <option value="Select an option">Select an option...</option>
+                                    <option value="Ziek">Ziek</option>
+                                    <option value="Vakantie">Vakantie</option>
+                                    <option value="Begrafenis">Begrafenis</option>
+                                    <option value="Bruiloft">Bruiloft</option>
+                                    <option value="Medisch">Medisch</option>
+                                    <option value="Anders...">Anders...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Beschrijving</label>
+                                <textarea class="form-control" id="message-text" maxlength="200"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="start" class="col-form-label">Start datum *</label>
+                                <input type="date" class="form-control" id="start" name="startdate" placeholder="Start datum" />
+                            </div>
+                            <div class="form-group">
+                                <label for="end" class="col-form-label">Eind datum *</label>
+                                <input type="date" class="form-control" id="end" name="enddate" placeholder="Eind datum" />
+                            </div>
+                            @* <div class="form-group">
+                            <label for="start" class="col-form-label">Starttijd</label>
+                            <input type="time" class="form-control" id="start" name="start" placeholder="Starttijd" />
+                            </div>
+                            <div class="form-group">
+                            <label for="end" class="col-form-label">Eindtijd</label>
+                            <input type="time" class="form-control" id="end" name="end" placeholder="Eindtijd" />
+                            </div> *@
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="resetForm()">Reset input</button>
+                        <button type="button" class="btn btn-success" id="verlofForm" onclick="submitForm()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            measurementId: "YOUR_MEASUREMENT_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function resetForm() {
+            document.getElementById("verlofForm").reset();
+        }
+
+        function submitForm() {
+            const reason = document.getElementById("verlof").value;
+            const addition = document.getElementById("message-text").value;
+            const startDate = document.getElementById("start").value;
+            const endDate = document.getElementById("end").value;
+
+            const data = {
+                reason,
+                addition,
+                startDate,
+                endDate,
+                startTime,
+                endTime
+            };
+
+            // Push the data to Firebase
+            const ref = database.ref("verlofaanvragen").push();
+            ref.set(data)
+                .then(() => {
+                    console.log("Data successfully saved to Firebase");
+                    resetForm();  // Reset the form after successful submission
+                })
+                .catch((error) => {
+                    console.error("Error saving data to Firebase:", error);
+                });
+        }
+    </script>
+
+    @*verlof uren beschikbaar*@
+    <div class="uren">
+        <h3>
+            Uren beschikbaar: 8
+        </h3>
+        <div id="piechart_3d" style="width: 900px; height: 500px;">
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+                google.charts.load("current", { packages: ["corechart"] });
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Task', 'Hours per Day'],
+                        ['gebruikte uren', 11],
+                        ['beschikbare uren', 2],
+                    ]);
+
+                    var options = {
+                        is3D: true,
+                    };
+
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+                    chart.draw(data, options);
+                }
+            </script>
+        </div>
+    </div>
+
+    @* Afwezigheid tabel *@
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Naam werknemer</th>
+                    <th scope="col">Begin datum</th>
+                    <th scope="col">Eind datum</th>
+                    <th scope="col">Reden</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-success">
+                    <th scope="row">frank</th>
+                    <td>01-01-2021</td>
+                    <td>01-01-2021</td>
+                    <td>Vakantie</td>
+                    <td>Goedgekeurd</td>
+                </tr>
+                <tr class="table-warning">
+                    <th scope="row">freek</th>
+                    <td>01-01-2021</td>
+                    <td>01-01-2021</td>
+                    <td>Vakantie</td>
+                    <td>in afwachting</td>
+                </tr>
+                <tr class="table-danger">
+                    <th scope="row">ferdinand</th>
+                    <td>01-01-2021</td>
+                    <td>01-01-2021</td>
+                    <td>medisch</td>
+                    <td>Afgewezen</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
