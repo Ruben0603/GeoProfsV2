@@ -3,8 +3,9 @@
 @{
 }
 
-<script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyCCzNwDI9iTiTEc0QTN0XU39RxqWR9XYm4",
@@ -15,23 +16,37 @@
         appId: "1:141244233397:web:9e2ce2844d4ca7160e70fc",
         measurementId: "G-SZ15Q61C7Q"
     };
-
+        //connect to firebase and display if the database is connected or not
     firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    console.log(firebase);
+        var db = firebase.firestore();
+        console.log(db);
+        db.collection("users").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${doc.data()}`);
+            });
+        });
 
-    const connectedRef = firebase.database().ref(".info/connected");
-    connectedRef.on("value", (snapshot) => {
-        if (snapshot.val() === true) {
-            console.log("Connected to the Firebase Realtime Database");
-        } else {
-            console.log("Not connected to the Firebase Realtime Database");
-        }
-    });
+    //pull user data from firebase
+    var user = firebase.auth().currentUser;
+    var naam, role, VerlofBeschikbaar, VerlofGebruikt;
+    if (user != null) {
+        naam = user.displayName;
+        email = user.email;
+        role = user.role;
+        VerlofBeschikbaar = user.VerlofBeschikbaar;
+        VerlofGebruikt = user.VerlofGebruikt;
+    }
+    console.log(naam);
+    //pull user data from firebase
+
+    
+
 </script>
 
 
 <head>
-    <link rel="stylesheet" href="~/css/style.css" />
+   <link rel="stylesheet" href="~/css/style.css" />
 </head>
 
 <h2>Verlof aanvragen</h2>
@@ -90,11 +105,15 @@
         <script type="text/javascript">
             google.charts.load("current", { packages: ["corechart"] });
             google.charts.setOnLoadCallback(drawChart);
+            //Uren van de werknemer
+            //MOET INFO UIT DE DATABASE HALEN IN DE TOEKOMST 
+            usedHours = 5;
+            availableHours = 5;
             function drawChart() {
                 var data = google.visualization.arrayToDataTable([
                     ['Task', 'Hours per Day'],
-                    ['gebruikte uren', 11],
-                    ['beschikbare uren', 2],
+                    ['beschikbare uren', availableHours],
+                    ['gebruikte uren', usedHours],
                 ]);
 
                 var options = {
