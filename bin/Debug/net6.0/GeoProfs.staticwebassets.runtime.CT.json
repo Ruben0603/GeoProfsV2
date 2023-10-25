@@ -1,7 +1,7 @@
 {
   "ContentRoots": [
-    "C:\\Users\\joran\\OneDrive\\Documenten\\GitHub\\Geoprofs\\wwwroot\\",
-    "C:\\Users\\joran\\OneDrive\\Documenten\\GitHub\\Geoprofs\\obj\\Debug\\net6.0\\scopedcss\\bundle\\"
+    "/src/wwwroot",
+    "/src/obj/Debug/net6.0/scopedcss/bundle"
   ],
   "Root": {
     "Children": {
